@@ -1,5 +1,5 @@
 import pandas as pd
-import numpy as np
+import numpy as np 
 
 # [distance in yards, tee, fairway, rough, sand, recovery, putting]
 data_table = [
@@ -86,10 +86,10 @@ columns = ['distance', 'tee', 'fairway', 'rough', 'sand', 'recovery', 'green']
 
 data = pd.DataFrame(data_table,columns=columns)
 
-print(data)
+# print(data)
 
 def calculate_strokes_gained(distance, shot_surface, data):
-    # Find the index corresponding to the given distance (assuming 'distance' column exists in the DataFrame)
+    # Find the index corresponding to the given distance
     distance_index = data[data['distance'] == distance].index
 
     # Check if the distance exists in the DataFrame
@@ -105,50 +105,40 @@ def calculate_strokes_gained(distance, shot_surface, data):
     # Fetch the value associated with the given distance and shot_surface
     strokes_gained = data.at[distance_index[0], shot_surface]
 
+    # Convert to float
+    strokes_gained = float(strokes_gained)
+
     return strokes_gained
 
 
-    # # Calculate strokes gained for putting separately
-    # last_distance = hole_data[-1][0]
+# Function to process and update strokes gained bins for a hole
+# def process_hole(hole_number):
+#     strokes_gained_bins = {
+#         'tee': [],
+#         'fairway': [],
+#         'rough': [],
+#         'sand' : [],
+#         'recovery' : [],
+#         'putting': []
+#     }
+    
+#     hole_data_for_processing = hole_data[hole_number]
 
-    # # Locate the row with the nearest distance
-    # putting_index = data_table['distance'].sub(last_distance).abs().idxmin()
-
-    # putting_strokes_gained = data_table.loc[putting_index, 'putting']
-    # if not pd.isnull(putting_strokes_gained):
-    #     strokes_gained_bins['putting'].append(putting_strokes_gained)
-
-
-    # return strokes_gained_bins
-
-# Create a dictionary to hold hole data
-hole_data = {}
+#     strokes_gained_bins = calculate_strokes_gained(hole_data_for_processing, strokes_gained_bins, data)
+    
+#     return strokes_gained_bins
 
 # Function to update hole data
-def update_hole_data(hole_number, data):
-    hole_data[hole_number] = data
-
-# Function to process and update strokes gained bins for a hole
-def process_hole(hole_number):
-    strokes_gained_bins = {
-        'tee': [],
-        'fairway': [],
-        'rough': [],
-        'putting': []
-    }
-    
-    hole_data_for_processing = hole_data[hole_number]
-    strokes_gained_bins = calculate_strokes_gained(hole_data_for_processing, strokes_gained_bins, data)
-    
-    return strokes_gained_bins
+# def update_hole_data(hole_number, data):
+#     hole_data[hole_number] = data
 
 # Example usage to update hole data
-update_hole_data(1, [
-    (400, 'tee', 3.99),
-    (200, 'fairway', 3.19),
-    (20, 'rough', 2.59),
-    (1, 'putting', 1.04)
-])
+# update_hole_data(1, [
+#     (400, 'tee', 3.99),
+#     (200, 'fairway', 3.19),
+#     (20, 'rough', 2.59),
+#     (1, 'putting', 1.04)
+# ])
 
 # # Example usage to process hole data and calculate strokes gained
 # hole_number = 1  # Choose the hole number to process

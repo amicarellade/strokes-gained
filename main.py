@@ -1,6 +1,38 @@
-# Strokes Gained 
+from calculate_strokes_gained import calculate_strokes_gained
+from calculate_strokes_gained import data
 
-from calculate_strokes_gained import *
+def input_shot_data():
+    distance = int(input("Enter the distance from the pin in yards: "))
+    shot_surface = input("Enter the shot surface (tee, fairway, rough, sand, recovery, green): ")
+    return distance, shot_surface
+
+def process_hole_data(num_shots, hole_data, data):
+    hole_total = 0
+    for i in range(num_shots):
+        distance, shot_surface = input_shot_data()
+
+        strokes_gained_value = calculate_strokes_gained(distance, shot_surface, data)
+        if strokes_gained_value is not None:
+            strokes_gained_value = float(strokes_gained_value)
+
+            if i == 0:
+                strokes_gained_value -= 1
+            else:
+                strokes_gained_value -= float(hole_data[i - 1]['strokes_gained_value'])
+
+            shot_data = {'distance': distance, 'surface': shot_surface, 'strokes_gained_value': strokes_gained_value}
+            hole_data.append(shot_data)
+            hole_total += strokes_gained_value
+        else:
+            print("Invalid input. Shot data not recorded.")
+
+    return hole_total
+
+def print_hole_data(hole, hole_data, hole_total):
+    print(f"\nHole {hole}:")
+    print(f"Hole Strokes Gained: {hole_total}")
+    for item in hole_data:
+        print(f"Distance: {item['distance']} yards, Surface: {item['surface']}, Strokes Gained Value: {item['strokes_gained_value']}")
 
 def main(data):
     num_holes = int(input("Enter the number of holes played (9 or 18): "))
@@ -16,31 +48,13 @@ def main(data):
         print(f"\nHole {hole}")
         num_shots = int(input("Enter the number of shots taken: "))
         hole_data = []
-        hole_total = 0  # To store hole-by-hole total strokes gained
 
-        for _ in range(num_shots):
-            distance = int(input("Enter the distance from the pin in yards: "))
-            shot_surface = input("Enter the shot surface (tee, fairway, rough, sand, recovery, green): ")
-
-            strokes_gained = calculate_strokes_gained(distance, shot_surface, data)
-            if strokes_gained is not None:
-                strokes_gained = float(strokes_gained) 
-                hole_data.append((distance, shot_surface, strokes_gained))
-                hole_total += strokes_gained  # Update hole total strokes gained
-                surface_totals[shot_surface] += strokes_gained  # Update surface totals
-            else:
-                print("Invalid input. Shot data not recorded.")
+        hole_total = process_hole_data(num_shots, hole_data, data)
 
         round_data.append(hole_data)
         hole_totals.append(hole_total)
 
-    print("\nStrokes Gained Data for the Round:")
-    for hole, data in enumerate(round_data, start=1):
-        print(f"\nHole {hole}:")
-        total_strokes_gained = hole_totals[hole - 1]
-        print(f"Hole Strokes Gained: {total_strokes_gained}")
-        for item in data:
-            print(f"Distance: {item[0]} yards, Surface: {item[1]}, Strokes Gained: {item[2]}")
+        print_hole_data(hole, hole_data, hole_total)
 
     print("\nSurface-by-Surface Strokes Gained Totals:")
     for surface, total in surface_totals.items():
