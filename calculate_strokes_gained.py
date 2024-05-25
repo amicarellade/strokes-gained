@@ -1,5 +1,5 @@
 import pandas as pd
-import numpy as np
+import numpy as np 
 
 # [distance in yards, tee, fairway, rough, sand, recovery, putting]
 data_table = [
@@ -86,10 +86,10 @@ columns = ['distance', 'tee', 'fairway', 'rough', 'sand', 'recovery', 'green']
 
 data = pd.DataFrame(data_table,columns=columns)
 
-print(data)
+# print(data)
 
 def calculate_strokes_gained(distance, shot_surface, data):
-    # Find the index corresponding to the given distance (assuming 'distance' column exists in the DataFrame)
+    # Find the index corresponding to the given distance
     distance_index = data[data['distance'] == distance].index
 
     # Check if the distance exists in the DataFrame
@@ -105,6 +105,8 @@ def calculate_strokes_gained(distance, shot_surface, data):
     # Fetch the value associated with the given distance and shot_surface
     strokes_gained = data.at[distance_index[0], shot_surface]
 
-    return strokes_gained
+    # Convert to float
+    strokes_gained = float(strokes_gained)
 
+    return strokes_gained
 

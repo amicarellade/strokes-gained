@@ -1,4 +1,3 @@
-# main.py
 from calculate_strokes_gained import *
 
 def main(data):
@@ -67,14 +66,6 @@ def main(data):
         hole_totals.append(hole_total)
         sg_categories['tee-to-green'] = sg_categories['off-the-tee'] + sg_categories['approach-the-green'] + sg_categories['around-the-green']
         sg_categories['total'] = sg_categories['tee-to-green'] + sg_categories['putting']
-
-    print("\nStrokes Gained Data for the Round:")
-    for hole, data in enumerate(round_data, start=1):
-        print(f"\nHole {hole}:")
-        total_strokes_gained = hole_totals[hole - 1]
-        print(f"Hole Strokes Gained: {total_strokes_gained}")
-        for item in data:
-            print(f"Distance: {item[0]} yards, Surface: {item[1]}, Strokes Gained: {item[2]}")
 
     print("\nStrokes Gained Totals by Category:")
     for category, total in sg_categories.items():
